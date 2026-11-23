@@ -86,7 +86,3 @@ node --test plugins/web-ship/hooks/guard-git.test.mjs
 Try local changes without publishing: `claude plugin marketplace add /path/to/claude-toolkit`
 then `claude plugin install web-ship@claude-toolkit`, and
 `claude plugin details web-ship@claude-toolkit` for the component inventory.
-
-The skills record what was learned building and deploying
-[agui-demo](https://github.com/lakota-camp/agui-demo). When a skill's advice
-turns out wrong, fix it here so every repo gets the fix.
