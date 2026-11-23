@@ -19,8 +19,36 @@ reaches every repo.
 
 ### 1. Claude Code plugin
 
-Commit this as `.claude/settings.json` in the repo (merge it into the file if
-one exists):
+Claude Code installs a plugin only when it is enabled in **your own (user)
+settings**. A plugin enabled only by a repo's `.claude/settings.json` is
+skipped (the debug log says `enabled only by repo-authored settings`), so a
+cloned repo cannot run code on its own.
+
+**Cloud sessions (claude.ai/code):** add this to the cloud environment's
+setup script (environment menu → Edit → Setup script). It runs when each fresh
+container starts, before Claude, and never blocks the session:
+
+```bash
+# Install the web-ship plugin (lakota-camp/claude-toolkit) at user scope.
+if command -v claude >/dev/null 2>&1; then
+  claude plugin marketplace add "https://github.com/lakota-camp/claude-toolkit.git#v0.1.0" \
+    && claude plugin install web-ship@claude-toolkit \
+    || echo "warning: web-ship plugin not installed" >&2
+fi
+```
+
+Put it on an environment every repo uses (e.g. Default) to get the plugin
+everywhere. Change `#v0.1.0` to move to a new release.
+
+**Your own computer:** install once; it persists in `~/.claude`:
+
+```
+/plugin install web-ship --marketplace lakota-camp/claude-toolkit
+```
+
+**Optional, in each repo:** commit `.claude/settings.json` to record which
+toolkit version the repo expects. It does not install the plugin by itself
+(checked in a cloud session):
 
 ```json
 {
@@ -35,19 +63,10 @@ one exists):
 }
 ```
 
-- Both keys are needed: a plugin listed in `enabledPlugins` without its
-  marketplace in `extraKnownMarketplaces` is not installed.
-- `ref` pins a tag, branch or commit. Omit it to follow the default branch.
-- Committing it to the repo (rather than your personal `~/.claude`) is what
-  makes it work in cloud sessions, whose containers start fresh each time.
-- Keep this repo **public**: private marketplaces install over git with
-  credential prompts disabled, which cloud sessions may not be able to satisfy.
+`ref` pins a tag, branch or commit; omit it to follow the default branch.
 
-Or install by hand in any session:
-
-```
-/plugin install web-ship --marketplace lakota-camp/claude-toolkit
-```
+Keep this repo **public**: private marketplaces install over git with
+credential prompts disabled, which cloud sessions may not be able to satisfy.
 
 ### 2. CI
 
