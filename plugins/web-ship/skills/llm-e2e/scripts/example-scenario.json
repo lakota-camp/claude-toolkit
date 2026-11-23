@@ -1,0 +1,14 @@
+[
+  { "when": { "userIncludes": "REFUSE" }, "refusal": true },
+  {
+    "when": { "toolResultFor": "toolu_lookup" },
+    "reply": { "text": "Here is what I found." }
+  },
+  {
+    "when": { "userIncludes": "" },
+    "reply": {
+      "text": "Let me look that up.",
+      "tool": { "id": "toolu_lookup", "name": "lookup", "input": { "query": "example" } }
+    }
+  }
+]

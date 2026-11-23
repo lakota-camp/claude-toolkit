@@ -1,0 +1,52 @@
+# Reusable CI for Node web apps: install, lint, test, build.
+#
+# Call it from another repo's workflow:
+#   jobs:
+#     ci:
+#       uses: lakota-camp/claude-toolkit/.github/workflows/node-ci.yml@v0.1.0
+#       with:
+#         node-version: "22"
+#
+# Steps whose npm script does not exist are skipped (`--if-present`).
+name: node-ci
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version to use.
+        type: string
+        default: "22"
+      working-directory:
+        description: Directory containing package.json (for monorepos).
+        type: string
+        default: "."
+      build:
+        description: Run `npm run build`.
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+      - run: npm ci
+      - run: npm run lint --if-present
+      - run: npm test --if-present
+      - if: ${{ inputs.build }}
+        run: npm run build --if-present
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"

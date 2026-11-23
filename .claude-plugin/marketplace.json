@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "claude-toolkit",
+  "description": "Reusable Claude Code plugins for building and shipping production web apps from anywhere.",
+  "owner": {
+    "name": "lakota-camp"
+  },
+  "plugins": [
+    {
+      "name": "web-ship",
+      "source": "./plugins/web-ship",
+      "description": "Verify a stack before coding, build in gated phases, test LLM apps without an API key, and ship to Vercel + Neon with the gotchas handled.",
+      "category": "development"
+    }
+  ]
+}

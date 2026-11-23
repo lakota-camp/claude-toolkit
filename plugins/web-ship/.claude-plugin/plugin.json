@@ -1,0 +1,10 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "web-ship",
+  "version": "0.1.0",
+  "description": "Verify a stack before coding, build in gated phases, test LLM apps without an API key, and ship to Vercel + Neon with the gotchas handled.",
+  "author": {
+    "name": "lakota-camp"
+  },
+  "repository": "https://github.com/lakota-camp/claude-toolkit"
+}
